@@ -1,0 +1,42 @@
+/* Position canvas in top-right corner of browser window */
+#handtracking-canvas {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  border: 3px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  z-index: 2147483647 !important; /* Maximum z-index to stay on top */
+  pointer-events: none !important; /* Allow clicks to pass through */
+}
+
+/* Spin animation for entire webpage */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply spin to the entire webpage */
+html.spinning {
+  animation: spin 0.5s ease-in-out !important;
+  transform-origin: center center !important;
+}
+
+/* Ensure all content spins with the page */
+html.spinning * {
+  transform-origin: center center !important;
+}
+
+body.spinning {
+  animation: spin 0.5s ease-in-out !important;
+  transform-origin: center center !important;
+}
+
+body.spinning * {
+  transform-origin: center center !important;
+}
+
