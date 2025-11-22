@@ -47,11 +47,15 @@ canvas {
 let thumbX;
 let indexX;
 
+let previousThumbTip = null;
+let thumbLength = null;
+let isSpinning = false;
+
 let hands = [];
 
   let bod = document.getElementById('body');
-  let spinElement = document.getElementsByID('spin')
-// let thumb;
+  let spinElement = document.getElementByID('spin')
+
 
 function modelReady() {
  handpose.on('predict', gotPose);
@@ -75,57 +79,86 @@ function draw() {
 
   if (hands && hands.length > 0) {
     const hand = hands[0];
-    const lm = hand.landmarks;
+    const landmarks = hand.landmarks;
     // const thumb = lm[4];
-         const thumb = lm[4];
+        //  const thumb = lm[4];
 
           // ellipse(thumb.x, thumb.y, 50, 50)
 
     // draw landmarks
     noStroke();
     fill(255, 255);
-    for (let i = 0; i < lm.length; i++) {
-       [thumbX, thumbY] = lm[4];
-            ellipse(thumbX, thumbY, 12);
+//     for (let i = 0; i < lm.length; i++) {
+//        [thumbX, thumbY] = lm[4];
+//             ellipse(thumbX, thumbY, 12);
       
-            const [indexX, indexY] = lm[8];
-            ellipse(indexX, indexY, 12);
-      
-      
+//             const [indexX, indexY] = lm[8];
+//             ellipse(indexX, indexY, 12);
       
       
-      console.log("index: " + indexX)
-            console.log("thumb: " + thumbX)
       
-                  console.log("thumb: " + thumbX )
+      
+//       console.log("index: " + indexX)
+//             console.log("thumb: " + thumbX)
+      
+//                   console.log("thumb: " + thumbX )
 
-  if (thumbX < 200){
-    spin();
-  } else{
-    console.log("nope!")
-  }
+//   if (thumbX < 200){
+//     spin();
+//   } else{
+//     console.log("nope!")
+//   }
 
-//          const thumb = lm[4];
+// //          const thumb = lm[4];
 
-//           ellipse(thumb.x, thumb.y, 50, 50)
-    }
- 
-
-  }
+// //           ellipse(thumb.x, thumb.y, 50, 50)
+//     }
+//   }
   
-  if (thumbX < 20){
-    spin();
-  } else{
-    console.log("nope!")
-  }
-   
+//   if (thumbX < 20){
+//     spin();
+//   } else{
+//     console.log("nope!")
+//   }
+
+if (landmarks.length >= 5) {
+          const [x1, y1] = landmarks[1]; // Thumb MCP (base)
+          const [x4, y4] = landmarks[4]; // Thumb tip
+          
+          // Calculate thumb length in video coordinates
+          thumbLength = Math.sqrt(Math.pow(x4 - x1, 2) + Math.pow(y4 - y1, 2));
+          
+          // Check for thumb movement gesture
+          if (previousThumbTip !== null && thumbLength > 0) {
+            const [prevX, prevY] = previousThumbTip;
+            const [currX, currY] = landmarks[4];
+            
+            // Calculate distance moved
+            const distanceMoved = Math.sqrt(Math.pow(currX - prevX, 2) + Math.pow(currY - prevY, 2));
+            
+            // Check if movement exceeds 40% of thumb length
+            const threshold = thumbLength * 0.4;
+            
+            if (distanceMoved > threshold && !isSpinning) {
+              spin();
+            }
+          }
+          
+          // Update previous thumb tip position
+          previousThumbTip = [landmarks[4][0], landmarks[4][1]];
+        }
+    }
+
 }
 
 function spin() {
-//   let bod = document.getElementById('body');
-//   let spin = document.getElementsByClassName('spin')
-  document.getElementById('bod').classList.add("spin");
-  
+
+  document.getElementById('bod').classList.add("w3-spin");
+  setTimeout(() => {
+        document.body.classList.remove('w3-spin');
+        document.documentElement.classList.remove('w3-spin');
+        isSpinning = false;
+      }, 1950); 
 }
 
 
