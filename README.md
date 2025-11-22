@@ -1,6 +1,7 @@
 # Fidget Browser
 
-A Chrome extension that uses ML5.js hand tracking to detect hand gestures and control webpages. Move your thumb quickly to spin the entire webpage!
+A Chrome extension that uses hand tracking to let you anxiously spin the internet! 
+by Re Chang and Sim Ciudad.
 
 ## Installation
 
