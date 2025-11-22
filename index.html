@@ -4,14 +4,30 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
   <script src="https://unpkg.com/ml5@0.6.0/dist/ml5.min.js"></script>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <meta charset="utf-8" />
   <style>
-    html, body {
+    html {
   margin: 0;
   padding: 0;
-}
+    }
+
+    #bod{
+ margin: 0;
+  padding: 0;
+    }
+
+    h1{
+        color: red;
+    }
+
+    #spin{
+            animation: spin 3s linear infinite;
+    }
+
+
 canvas {
   display: block;
 }
@@ -20,16 +36,21 @@ canvas {
 
 </head>
 
-<body>
+<body id="bod">
+    <h1>Hello</h1>
   <!-- <script src="sketch.js">
 
   </script> -->
   <script>
     let video, handpose;
 
-// let thumb;
+let thumbX;
+let indexX;
 
 let hands = [];
+
+  let bod = document.getElementById('body');
+  let spinElement = document.getElementsByID('spin')
 // let thumb;
 
 function modelReady() {
@@ -42,7 +63,7 @@ function gotPose(results) {
 
 function setup() {
   createCanvas(640, 480);
-  frameRate(1)
+//   frameRate(1)
   video = createCapture(VIDEO);
   video.hide();
   handpose = ml5.handpose(video, modelReady);
@@ -64,7 +85,7 @@ function draw() {
     noStroke();
     fill(255, 255);
     for (let i = 0; i < lm.length; i++) {
-      const [thumbX, thumbY] = lm[4];
+       [thumbX, thumbY] = lm[4];
             ellipse(thumbX, thumbY, 12);
       
             const [indexX, indexY] = lm[8];
@@ -78,7 +99,11 @@ function draw() {
       
                   console.log("thumb: " + thumbX )
 
-
+  if (thumbX < 200){
+    spin();
+  } else{
+    console.log("nope!")
+  }
 
 //          const thumb = lm[4];
 
@@ -88,8 +113,22 @@ function draw() {
 
   }
   
+  if (thumbX < 20){
+    spin();
+  } else{
+    console.log("nope!")
+  }
    
 }
+
+function spin() {
+//   let bod = document.getElementById('body');
+//   let spin = document.getElementsByClassName('spin')
+  document.getElementById('bod').classList.add("spin");
+  
+}
+
+
   </script>
 </body>
 
