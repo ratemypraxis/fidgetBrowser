@@ -84,8 +84,8 @@
 </head>
 <body>
   <div class="info">
-    <h1>👋 Hand Tracking Test</h1>
-    <p>Show your hand to the camera in the top-right corner</p>
+    <h1>Fidget Browser</h1>
+    <p>Show your hand to your webcam pleae.</p>
   </div>
   
   <div id="status">Loading hand tracking model...</div>
@@ -125,7 +125,7 @@
       modelLoaded = true;
       
       const statusEl = document.getElementById('status');
-      statusEl.textContent = 'Model loaded! Show your hand to the camera';
+      statusEl.textContent = 'Model loaded! Show your hand to the camera, position it as if you were holding a fidget spinner';
       statusEl.classList.add('ready');
       
       setTimeout(() => {
@@ -218,28 +218,27 @@
     
     function drawHandSkeleton(landmarks, scaleX, scaleY) {
       const connections = [
-        // Thumb
+        // thumb
         [0, 1], [1, 2], [2, 3], [3, 4],
-        // Index finger
+        // index finger
         [0, 5], [5, 6], [6, 7], [7, 8],
-        // Middle finger
+        // middle finger
         [0, 9], [9, 10], [10, 11], [11, 12],
-        // Ring finger
+        // ring finger
         [0, 13], [13, 14], [14, 15], [15, 16],
-        // Pinky
+        // pinky
         [0, 17], [17, 18], [18, 19], [19, 20],
-        // Palm connections
+        // palms
         [5, 9], [9, 13], [13, 17]
       ];
       
-      stroke(0, 255, 0, 150); // Semi-transparent green
+      stroke(0, 255, 0, 150); 
       strokeWeight(2);
       
       for (let connection of connections) {
         const [i, j] = connection;
         const [x1, y1] = landmarks[i];
         const [x2, y2] = landmarks[j];
-        // Scale coordinates to match canvas
         line(x1 * scaleX, y1 * scaleY, x2 * scaleX, y2 * scaleY);
       }
     }
@@ -251,31 +250,28 @@
       const [x1, y1] = topLeft;
       const [x2, y2] = bottomRight;
       
-      // Scale coordinates to match canvas
       const scaledX1 = x1 * scaleX;
       const scaledY1 = y1 * scaleY;
       const scaledX2 = x2 * scaleX;
       const scaledY2 = y2 * scaleY;
       
       noFill();
-      stroke(255, 0, 255); // Magenta color
+      stroke(255, 100, 255); 
       strokeWeight(2);
       rect(scaledX1, scaledY1, scaledX2 - scaledX1, scaledY2 - scaledY1);
     }
     
     function drawNoHandsMessage() {
-      // Semi-transparent overlay
       fill(0, 0, 0, 100);
       noStroke();
       rect(0, 0, width, height);
       
-      // Message text
       fill(255);
       textAlign(CENTER, CENTER);
       textSize(16);
-      text('No hands detected', width / 2, height / 2);
+      text('Cannot see or interpret your hands...', width / 2, height / 2);
       textSize(12);
-      text('Show your hand to the camera', width / 2, height / 2 + 25);
+      text('Show your hand to the camera, position it like you are holding a fidget spinner', width / 2, height / 2 + 25);
     }
   </script>
 </body>
