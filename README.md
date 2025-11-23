@@ -1,7 +1,7 @@
-# Fidget Browser
+# Stress-relieving Browser
 
 A Chrome extension that uses hand tracking to let you anxiously spin the internet! 
-by Re Chang and Sim Ciudad.
+***by Re Chang and Sam H. (Sim)***
 
 ![fidgy](https://github.com/user-attachments/assets/d56b5efd-92cb-4065-adc8-66ad496ec33f)
 
