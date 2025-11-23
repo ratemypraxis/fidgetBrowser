@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Hand Tracking Gesture Control",
+  "name": "Fidget Browser",
   "version": "1.0.0",
-  "description": "Control webpages with hand gestures using ML5.js hand tracking",
+  "description": "Spin the internet to blow off soem steam",
   "permissions": [
     "activeTab"
   ],
