@@ -1,6 +1,7 @@
 # Stress-relieving Browser
 
 A Chrome extension that uses hand tracking to let you anxiously spin the internet! 
+
 ***by Re Chang and Sam H. (Sim)***
 
 ![fidgy](https://github.com/user-attachments/assets/d56b5efd-92cb-4065-adc8-66ad496ec33f)
@@ -12,7 +13,7 @@ A Chrome extension that uses hand tracking to let you anxiously spin the interne
 1. Open Chrome and navigate to `chrome://extensions/`
 2. Enable "Developer mode" (toggle in top-right corner)
 3. Click "Load unpacked"
-4. Select the `fidget-browser` directory
+4. Select the `fidgetBrowser` directory
 5. Grant camera permissions when prompted
 
 ## Usage
