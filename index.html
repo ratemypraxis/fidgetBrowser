@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hand Tracking Test</title>
+  <title>Fidget Browser</title>
   
-  <!-- Load p5.js and ml5.js from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
   <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
   
@@ -21,7 +20,6 @@
       align-items: center;
     }
     
-    /* Position canvas in top-right corner */
     #handtracking-canvas {
       position: fixed;
       top: 20px;
@@ -32,7 +30,6 @@
       z-index: 9999;
     }
     
-    /* Loading message */
     #status {
       position: fixed;
       top: 20px;
@@ -50,7 +47,6 @@
       color: white;
     }
     
-    /* Info text */
     .info {
       text-align: center;
       color: white;
@@ -68,7 +64,6 @@
       opacity: 0.9;
     }
     
-    /* Spin animation for webpage */
     @keyframes spin {
       from {
         transform: rotate(0deg);
@@ -96,36 +91,29 @@
   <div id="status">Loading hand tracking model...</div>
 
   <script>
-    // Global variables
     let video;
     let handpose;
     let hands = [];
     let modelLoaded = false;
     
-    // Thumb tracking variables
     let previousThumbTip = null;
     let thumbLength = null;
     let isSpinning = false;
     
     function setup() {
-      // Create canvas with fixed size (320x240)
       let canvas = createCanvas(320, 240);
       canvas.id('handtracking-canvas');
       
-      // Initialize video capture
       video = createCapture(VIDEO);
-      // Set video size to match canvas exactly
       video.size(320, 240);
-      video.hide(); // Hide the raw HTML video element
+      video.hide();
       
-      // Initialize handpose model - wait a bit for video to be ready
       setTimeout(() => {
         handpose = ml5.handpose(video, {
           flipHorizontal: false,
           maxNumHands: 2
         }, modelReady);
         
-        // Listen for hand predictions
         handpose.on('predict', (results) => {
           hands = results;
         });
@@ -136,32 +124,25 @@
       console.log('Hand tracking model loaded!');
       modelLoaded = true;
       
-      // Update status message
       const statusEl = document.getElementById('status');
       statusEl.textContent = 'Model loaded! Show your hand to the camera';
       statusEl.classList.add('ready');
       
-      // Hide status after 3 seconds
       setTimeout(() => {
         statusEl.style.display = 'none';
       }, 3000);
     }
     
     function draw() {
-      // Draw video stream as background, scaled to canvas size
       if (video && video.loadedmetadata) {
-        // Draw video to fill canvas exactly
         image(video, 0, 0, width, height);
       }
       
-      // Draw hand keypoints if hands are detected
       if (hands && hands.length > 0) {
         drawHands();
       } else if (modelLoaded) {
-        // Reset thumb tracking when no hands detected
         previousThumbTip = null;
         thumbLength = null;
-        // Show message when no hands detected
         drawNoHandsMessage();
       }
     }
@@ -170,35 +151,26 @@
       for (let i = 0; i < hands.length; i++) {
         const hand = hands[i];
         
-        // Draw all 21 landmarks (keypoints)
         const landmarks = hand.landmarks;
         
-        // Get video dimensions for coordinate scaling
-        // ml5.js returns coordinates relative to the video element's actual size
         const videoWidth = video.elt ? video.elt.videoWidth : (video.width || 320);
         const videoHeight = video.elt ? video.elt.videoHeight : (video.height || 240);
         
-        // Calculate scale factors to map from video coordinates to canvas coordinates
         const scaleX = width / videoWidth;
         const scaleY = height / videoHeight;
         
-        // Calculate thumb length from landmark 1 to landmark 4
         if (landmarks.length >= 5) {
-          const [x1, y1] = landmarks[1]; // Thumb MCP (base)
-          const [x4, y4] = landmarks[4]; // Thumb tip
-          
-          // Calculate thumb length in video coordinates
+          const [x1, y1] = landmarks[1]; 
+          const [x4, y4] = landmarks[4]; 
+
           thumbLength = Math.sqrt(Math.pow(x4 - x1, 2) + Math.pow(y4 - y1, 2));
           
-          // Check for thumb movement gesture
           if (previousThumbTip !== null && thumbLength > 0) {
             const [prevX, prevY] = previousThumbTip;
             const [currX, currY] = landmarks[4];
             
-            // Calculate distance moved
             const distanceMoved = Math.sqrt(Math.pow(currX - prevX, 2) + Math.pow(currY - prevY, 2));
             
-            // Check if movement exceeds 40% of thumb length
             const threshold = thumbLength * 0.4;
             
             if (distanceMoved > threshold && !isSpinning) {
@@ -206,55 +178,45 @@
             }
           }
           
-          // Update previous thumb tip position
           previousThumbTip = [landmarks[4][0], landmarks[4][1]];
         }
         
-        // Draw keypoints
         for (let j = 0; j < landmarks.length; j++) {
           const [x, y, z] = landmarks[j];
           
-          // Scale coordinates to match canvas size
           const scaledX = x * scaleX;
           const scaledY = y * scaleY;
           
-          // Draw each keypoint as a circle
-          fill(0, 255, 0); // Green color
+          fill(0, 255, 0); 
           noStroke();
           circle(scaledX, scaledY, 10);
           
-          // Optional: Draw smaller white center for better visibility
           fill(255);
           circle(scaledX, scaledY, 4);
         }
         
-        // Optional: Draw connections between landmarks to show hand skeleton
         drawHandSkeleton(landmarks, scaleX, scaleY);
         
-        // Draw hand bounding box (optional)
         drawBoundingBox(hand.boundingBox, scaleX, scaleY);
       }
     }
     
     function triggerSpin() {
-      if (isSpinning) return; // Prevent multiple spins
+      if (isSpinning) return; 
       
       isSpinning = true;
       
-      // Add spin animation to body and html
       document.body.classList.add('spinning');
       document.documentElement.classList.add('spinning');
       
-      // Remove animation class after animation completes
       setTimeout(() => {
         document.body.classList.remove('spinning');
         document.documentElement.classList.remove('spinning');
         isSpinning = false;
-      }, 500); // Match animation duration
+      }, 500); 
     }
     
     function drawHandSkeleton(landmarks, scaleX, scaleY) {
-      // Define connections between landmarks to form hand skeleton
       const connections = [
         // Thumb
         [0, 1], [1, 2], [2, 3], [3, 4],
