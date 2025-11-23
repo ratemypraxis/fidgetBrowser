@@ -3,6 +3,9 @@
 A Chrome extension that uses hand tracking to let you anxiously spin the internet! 
 by Re Chang and Sim Ciudad.
 
+![Uploading fidgy.gif…]()
+
+
 ## Installation
 
 1. Open Chrome and navigate to `chrome://extensions/`
